@@ -1,39 +1,39 @@
+import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Container, Card } from "react-bootstrap";
-import TodoForm from "./components/TodoForm";
-import TodoList from "./components/TodoList";
+import Home from "./pages/Home";
+import JobDetails from "./pages/JobDetails";
+import SavedJobs from "./pages/SavedJobs";
+import MyNavbar from "./components/Navbar";
 
-const App = () => {
-  const [tasks, setTasks] = useState([]);
-
+function App() {
+  const [savedJobs, setSavedJobs] = useState([]);
 
   useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    setTasks(savedTasks);
+    const saved = JSON.parse(localStorage.getItem("savedJobs")) || [];
+    setSavedJobs(saved);
   }, []);
 
-
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
-  const addTask = (task) => {
-    setTasks([...tasks, task]);
-  };
-
-  const deleteTask = (index) => {
-    setTasks(tasks.filter((_, i) => i !== index));
+  const toggleSaveJob = (job) => {
+    let updatedJobs;
+    if (savedJobs.some((saved) => saved.id === job.id)) {
+      updatedJobs = savedJobs.filter((saved) => saved.id !== job.id);
+    } else {
+      updatedJobs = [...savedJobs, job];
+    }
+    setSavedJobs(updatedJobs);
+    localStorage.setItem("savedJobs", JSON.stringify(updatedJobs));
   };
 
   return (
-    <Container className="mt-5 d-flex justify-content-center">
-      <Card style={{ width: "400px" }} className="p-3 shadow-lg">
-        <h3 className="text-center">Todo List</h3>
-        <TodoForm addTask={addTask} />
-        <TodoList tasks={tasks} deleteTask={deleteTask} />
-      </Card>
-    </Container>
+    <>
+      <MyNavbar />
+      <Routes>
+        <Route path="/" element={<Home toggleSaveJob={toggleSaveJob} savedJobs={savedJobs} />} />
+        <Route path="/job/:id" element={<JobDetails toggleSaveJob={toggleSaveJob} savedJobs={savedJobs} />} />
+        <Route path="/saved-jobs" element={<SavedJobs savedJobs={savedJobs} />} />
+      </Routes>
+    </>
   );
-};
+}
 
 export default App;
