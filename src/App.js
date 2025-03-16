@@ -7,6 +7,7 @@ import MyNavbar from "./components/Navbar";
 
 function App() {
   const [savedJobs, setSavedJobs] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // ✅ Added search state
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("savedJobs")) || [];
@@ -26,9 +27,10 @@ function App() {
 
   return (
     <>
-      <MyNavbar />
+      {/* ✅ Pass setSearchQuery to MyNavbar */}
+      <MyNavbar setSearchQuery={setSearchQuery} />
       <Routes>
-        <Route path="/" element={<Home toggleSaveJob={toggleSaveJob} savedJobs={savedJobs} />} />
+        <Route path="/" element={<Home toggleSaveJob={toggleSaveJob} savedJobs={savedJobs} searchQuery={searchQuery} />} />
         <Route path="/job/:id" element={<JobDetails toggleSaveJob={toggleSaveJob} savedJobs={savedJobs} />} />
         <Route path="/saved-jobs" element={<SavedJobs savedJobs={savedJobs} />} />
       </Routes>
