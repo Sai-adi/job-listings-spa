@@ -36,12 +36,12 @@ function MyNavbar({ setSearchQuery }) {
             <Button variant="outline-primary">Search</Button>
           </Form>
 
-          {/* Saved Jobs Button */}
+          {}
           <Button as={Link} to="/saved-jobs" variant="outline-secondary" className="ms-3">
             <Bookmark size={18} />
           </Button>
 
-          {/* Dark Mode Toggle */}
+          {}
           <Button variant="outline-secondary" className="ms-3" onClick={() => setDarkMode(!darkMode)}>
             {darkMode ? <Sun size={18} /> : <Moon size={18} />}
           </Button>
